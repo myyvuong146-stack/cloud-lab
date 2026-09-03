@@ -2,11 +2,7 @@
 *.tmp
 bin/
 build/
-*.log
-*.tmp
 __pycache__/
 .env
-*.log
-*.tmp
-__pycache__/
-.env
+node_modules/
+*.swp
