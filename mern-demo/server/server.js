@@ -11,7 +11,9 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
 
-mongoose.connect(process.env.MONGODB_URI)
+// Kết nối MongoDB
+mongoose
+  .connect(process.env.MONGODB_URI)
   .then(() => {
     console.log("MongoDB connected successfully!");
 
@@ -23,10 +25,27 @@ mongoose.connect(process.env.MONGODB_URI)
     console.error("MongoDB connection failed:", error);
   });
 
+// Câu 36: GET /api/hello
 app.get("/api/hello", (req, res) => {
   res.json({
-    message: "Backend is working!"
+    message: "Backend is working!",
   });
+});
+
+// Câu 46: GET /api/students
+app.get("/api/students", async (req, res) => {
+  try {
+    const students = await Student.find();
+
+    res.json(students);
+  } catch (error) {
+    console.error("Error getting students:", error);
+
+    res.status(500).json({
+      message: "Error getting students",
+      error: error.message,
+    });
+  }
 });
 
 // Câu 37: POST /api/students
@@ -37,7 +56,7 @@ app.post("/api/students", async (req, res) => {
     const student = await Student.create({
       studentId,
       name,
-      email
+      email,
     });
 
     res.status(201).json(student);
@@ -46,7 +65,7 @@ app.post("/api/students", async (req, res) => {
 
     res.status(500).json({
       message: "Error creating student",
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -61,17 +80,17 @@ app.put("/api/students/:id", async (req, res) => {
       {
         studentId,
         name,
-        email
+        email,
       },
       {
         new: true,
-        runValidators: true
-      }
+        runValidators: true,
+      },
     );
 
     if (!student) {
       return res.status(404).json({
-        message: "Student not found"
+        message: "Student not found",
       });
     }
 
@@ -81,7 +100,7 @@ app.put("/api/students/:id", async (req, res) => {
 
     res.status(500).json({
       message: "Error updating student",
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -93,20 +112,20 @@ app.delete("/api/students/:id", async (req, res) => {
 
     if (!student) {
       return res.status(404).json({
-        message: "Student not found"
+        message: "Student not found",
       });
     }
 
     res.json({
       message: "Student deleted successfully",
-      student
+      student,
     });
   } catch (error) {
     console.error("Error deleting student:", error);
 
     res.status(500).json({
       message: "Error deleting student",
-      error: error.message
+      error: error.message,
     });
   }
 });

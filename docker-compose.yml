@@ -1,0 +1,22 @@
+services:
+  backend:
+    build:
+      context: ./mern-demo
+      dockerfile: server/Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGODB_URI=${MONGODB_URI}
+    networks:
+      default:
+        aliases:
+          - mern-backend
+
+  frontend:
+    build: ./mern-demo/client
+    ports:
+      - "4173:4173"
+
+networks:
+  default:
+    name: mern-network
